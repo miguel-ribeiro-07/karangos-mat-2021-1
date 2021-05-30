@@ -34,6 +34,9 @@ import TopBar from './ui/TopBar'
 import FooterBar from './ui/FooterBar'
 import Box from '@material-ui/core/Box'
 import { makeStyles } from '@material-ui/core/styles'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import KarangosList from './routed/KarangosList'
+import KarangosForm from './routed/KarangosForm'
 
 const theme = createMuiTheme({
   palette: {
@@ -52,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     minHeight: '100vh', // 100% da altura da área de visualização
     margin: '0 0 0 0'  // margem de 42px inferior para acomodar a barra inferior
+  },
+  routed:{
+    padding:'25px',
+    color: theme.palette.text.primary
   }
 }))
 
@@ -59,8 +66,23 @@ function Main() {
   const classes = useStyles()
   return (
     <Box className={classes.main}>
-      <TopBar />
-      <FooterBar />
+      <BrowserRouter> {/*  Inicia a região onde pode haver troca dinâmica de elementos */}
+        <TopBar />
+        <Box id="routed" className={classes.routed}>
+          <Switch> {/* Determina qual elemento será exibido, de acordo com a rota */}
+            
+            <Route path="/list">
+              <KarangosList />
+            </Route>
+
+            <Route path="/new">
+              <KarangosForm />
+            </Route>
+
+          </Switch>
+        </Box>
+        <FooterBar />
+      </BrowserRouter>
     </Box>
   )
 }
@@ -68,7 +90,7 @@ function Main() {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Main />
+      <Main/>
     </ThemeProvider>
   );
 }
