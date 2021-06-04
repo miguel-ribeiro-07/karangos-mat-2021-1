@@ -10,21 +10,45 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox'
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Toolbar from '@material-ui/core/Toolbar'
+import Button from '@material-ui/core/Button'
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import {useHistory} from 'react-router-dom'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 650,
   },
-});
+  tableRow: {
+    '& button': {       // Esconde os botões na linha de tabela "normal"
+      visibility: 'hidden'
+    },
+    '&:hover button': { // Exibe os botões de volta quando o mouse passar por cima
+      visibility: 'visible'
+    },
+    '&:hover': {        // Cor de fundo diferente quando o mouse passar sobre a linha
+      backgroundColor: theme.palette.action.hover
+    }
+  },
+  toolbar:{
+    justifyContent:'flex-end',
+    paddingRight:0,
+    marginTop: theme.spacing(2,0),
+  }
+}));
 
 export default function KarangosForm(){
     const classes = useStyles();
     const [karangos, setKarangos] = useState([])
+    const history = useHistory()
 
     useEffect(()=>{
         async function getData(){
             try{
-                let response = await axios.get('https://api.faustocintra.com.br/karangos')
+                let response = await axios.get('https://api.faustocintra.com.br/karangos?by=marca,modelo')
             setKarangos(response.data)
             }
             catch(error){
@@ -37,6 +61,12 @@ export default function KarangosForm(){
     return(
         <>
         <h1>Listar Karangos</h1>
+        <Toolbar className={classes.toolbar}>
+          <Button color='secondary' variant='contained' size='large'
+           startIcon={<AddBoxIcon/>} onClick={() => history.push('/new')}>
+             Novo Karango
+          </Button>
+        </Toolbar>
         <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
@@ -45,25 +75,37 @@ export default function KarangosForm(){
             <TableCell>Marca</TableCell>
             <TableCell>Modelo</TableCell>
             <TableCell>Cor</TableCell>
-            <TableCell>Ano</TableCell>
+            <TableCell align='center'>Ano</TableCell>
             <TableCell align='center'>Importado?</TableCell>
-            <TableCell>Placa</TableCell>
+            <TableCell align='center'>Placa</TableCell>
             <TableCell align='right'>Preço</TableCell>
+            <TableCell align='right'>Editar</TableCell>
+            <TableCell align='right'>Excluir</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {karangos.map((karango) => (
-            <TableRow key={karango.name}>
+            <TableRow key={karango.name} className={classes.tableRow}>
               <TableCell >{karango.id}</TableCell>
               <TableCell >{karango.marca}</TableCell>
               <TableCell >{karango.modelo}</TableCell>
               <TableCell >{karango.cor}</TableCell>
-              <TableCell >{karango.ano_fabricacao}</TableCell>
-              <TableCell >
-                <Checkbox  checked={karango.importado == 1 ? true: false} readonly='readonly'/>
+              <TableCell align='center' >{karango.ano_fabricacao}</TableCell>
+              <TableCell align='center'>
+                <Checkbox  checked={karango.importado === '1' ? true: false} readonly='readonly'/>
               </TableCell>
-              <TableCell >{karango.placa}</TableCell>
+              <TableCell align='center'>{karango.placa}</TableCell>
               <TableCell align='right'>{Number(karango.preco).toLocaleString('pt-br', {style:'currency', currency: 'BRL'})}
+              </TableCell>
+              <TableCell align='right'>
+              <IconButton aria-label="editar">
+                <EditIcon/>
+              </IconButton>
+              </TableCell>
+              <TableCell align='right'>
+              <IconButton aria-label="delete">
+                <DeleteIcon color="error"/>
+              </IconButton>
               </TableCell>            
             </TableRow>
           ))}
