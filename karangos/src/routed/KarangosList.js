@@ -54,22 +54,23 @@ export default function KarangosForm(){
     const[sbMessage, setSbMessage] = useState('Exclusão com sucesso!')
 
 
-    useEffect(()=>{
-        async function getData(){
-            try{
-                let response = await axios.get('https://api.faustocintra.com.br/karangos?by=marca,modelo')
-            setKarangos(response.data)
-            }
-            catch(error){
-                console.log(error)
-            }
-        }     
+    useEffect(()=>{  
         getData()
     }, [])// Executado apenas uma vez no carregamento
         //inicial quando está vazio
+        async function getData(){
+          try{
+              let response = await axios.get('https://api.faustocintra.com.br/karangos?by=marca,modelo')
+          if(response.data.length >0) setKarangos(response.data)
+          }
+          catch(error){
+              console.log(error)
+          }
+      }  
         async function deleteItem() {
           try {
             await axios.delete(`https://api.faustocintra.com.br/karangos/${deletable}`)
+            getData() // atualiza os dados da tabela
             setSbSeverity('success')
             setSbMessage('Exclusão efetuada com sucesso.')
           }
