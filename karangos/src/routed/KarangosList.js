@@ -17,6 +17,9 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import {useHistory} from 'react-router-dom'
+import ConfirmDialog from '../ui/ConfirmDialog'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -43,7 +46,13 @@ const useStyles = makeStyles(theme => ({
 export default function KarangosForm(){
     const classes = useStyles();
     const [karangos, setKarangos] = useState([])
+    const [deletable, setDeletable] = useState()
+    const [dialogOpen, setDialogOpen] =  useState(false)
     const history = useHistory()
+    const[sbOpen, setSbOpen] = useState(false)
+    const[sbSeverity, setSbSeverity] = useState('sucess')
+    const[sbMessage, setSbMessage] = useState('Exclusão com sucesso!')
+
 
     useEffect(()=>{
         async function getData(){
@@ -58,8 +67,39 @@ export default function KarangosForm(){
         getData()
     }, [])// Executado apenas uma vez no carregamento
         //inicial quando está vazio
+        async function deleteItem() {
+          try {
+            await axios.delete(`https://api.faustocintra.com.br/karangos/${deletable}`)
+            setSbSeverity('success')
+            setSbMessage('Exclusão efetuada com sucesso.')
+          }
+          catch(error) {
+            setSbSeverity('error')
+            setSbMessage('ERRO: ' + error.message)
+          }
+          setSbOpen(true)   // Exibe a snackbar
+        }
+        function handleDialogClose(result){
+          setDialogOpen(false)
+              if(result) deleteItem()
+        }
+        function handleDelete(id){
+          setDeletable(id)
+          setDialogOpen(true)
+        }
+        function handleSbClose(){
+          setSbOpen(false)
+        }
     return(
         <>
+        <ConfirmDialog isOpen={dialogOpen} onClose={handleDialogClose}>
+          Deseja Realmente excluir este Karango?
+        </ConfirmDialog>
+        <Snackbar open={sbOpen} autoHideDuration={6000} onClose={handleSbClose}>
+          <MuiAlert elevation={6} variant="filled" onClose={handleSbClose} severity={sbSeverity}>
+            {sbMessage}
+          </MuiAlert>
+        </Snackbar>
         <h1>Listar Karangos</h1>
         <Toolbar className={classes.toolbar}>
           <Button color='secondary' variant='contained' size='large'
@@ -103,7 +143,7 @@ export default function KarangosForm(){
               </IconButton>
               </TableCell>
               <TableCell align='right'>
-              <IconButton aria-label="delete">
+              <IconButton aria-label="delete" onClick={() => handleDelete(karango.id)}>
                 <DeleteIcon color="error"/>
               </IconButton>
               </TableCell>            
