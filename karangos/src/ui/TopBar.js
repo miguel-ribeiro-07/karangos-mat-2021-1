@@ -9,8 +9,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  logo:{
-      width: '300px'
+  logo: {
+    width: '300px'
   }
 }));
 
@@ -21,8 +21,8 @@ export default function TopBar() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <MainMenu/>
-          <img src={logotipo} alt="karangos" className={classes.logo}></img>
+          <MainMenu />
+          <img src={logotipo} className={classes.logo} alt="Karangos" />
         </Toolbar>
       </AppBar>
     </div>

@@ -24,9 +24,6 @@ import Button from '@material-ui/core/Button'
     </header>
   </div>
 */
-
-
-
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import yellow from '@material-ui/core/colors/yellow';
 import pink from '@material-ui/core/colors/pink';
@@ -53,11 +50,11 @@ const theme = createMuiTheme({
 const useStyles = makeStyles((theme) => ({
   main: {
     backgroundColor: theme.palette.background.default,
-    paddingBottom:'42px',
+    paddingBottom: '42px',  // evita que o footer cubra o conteúdo
     minHeight: '100vh' // 100% da altura da área de visualização
   },
-  routed:{
-    padding:'25px',
+  routed: {
+    padding: '25px',
     color: theme.palette.text.primary,
     fontFamily: theme.typography.fontFamily
   }
@@ -80,6 +77,11 @@ function Main() {
               <KarangosForm />
             </Route>
 
+            {/* :id é um parâmetro (espécie de variável de rota) */}
+            <Route path="/edit/:id">
+              <KarangosForm />
+            </Route>
+
           </Switch>
         </Box>
         <FooterBar />
@@ -91,7 +93,7 @@ function Main() {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Main/>
+      <Main />
     </ThemeProvider>
   );
 }

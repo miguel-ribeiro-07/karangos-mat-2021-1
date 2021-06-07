@@ -10,22 +10,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import yellow from '@material-ui/core/colors/yellow'
 
 const useStyle = makeStyles(theme => ({
-  dialogContent:{
-    display:'flex',
-    justifyContent:'space-between'
+  dialogContent: {
+    display: 'flex',
+    justifyContent: 'space-between'
   },
-  warningIcon:{
+  warningIcon: {
     color: yellow[500],
     marginRight: theme.spacing(2)
   }
 }))
 
 export default function ConfirmDialog({title = 'Confirmar', isOpen = false, onClose, children}) {
+  const classes = useStyle()
 
   const handleClose = (result) => {
-    onClose(result);
+    onClose(result)
   };
-  const classes = useStyle()
 
   return (
     <div>
@@ -37,14 +37,14 @@ export default function ConfirmDialog({title = 'Confirmar', isOpen = false, onCl
       >
         <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent className={classes.dialogContent}>
-          <WarningIcon className={classes.warningIcon} color="warning" fontSize="large"></WarningIcon>
+          <WarningIcon className={classes.warningIcon} fontSize="large" />
           <DialogContentText id="alert-dialog-description">
             {children}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleClose(true)} color="primary">
-            Ok
+            OK
           </Button>
           <Button onClick={() => handleClose(false)} color="primary" autoFocus>
             Cancelar
