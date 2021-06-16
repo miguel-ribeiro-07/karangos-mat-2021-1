@@ -59,7 +59,10 @@ export default function HomePage() {
             <p>Karangos é um projeto front-end desenvolvido pelo Prof. Fausto Cintra juntamente com a turma do 4º semestre matutino de ADS da Fatec Franca.</p>
             <p>Seu objetivo é demonstrar as funcionalidades e possibilidades do React em conjunto com a biblioteca de componentes Material UI, acessando uma API REST remota.</p>
             <p>Clique sobre ícone do menu no canto superior esquerdo para acessar as funcionalidades.</p>
-            <p className={classes.paragBotao}><Button variant="contained" color='secondary' onClick={() => setVisible(!visible)}>Supresa!</Button></p>
+            <p className={classes.paragBotao}>
+                <Button variant="contained" color='secondary' onClick={() => setVisible(!visible)}>Supresa!
+                </Button>
+            </p>
             <img src={imagem} className={classes.figura} alt="Carros antigos" style={{opacity: visible ? '1' : '0', height: visible ? '591px': '0'}} />
         </>
     )
