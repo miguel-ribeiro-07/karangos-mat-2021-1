@@ -212,6 +212,7 @@ export default function KarangosForm() {
     setError(errorTemp)
     return isValid
   }
+  /**/
 
   async function saveData() {
     try {
